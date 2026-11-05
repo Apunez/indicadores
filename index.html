@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kit de Diagnóstico de Liquidez - Corporación Aceros Arequipa S.A.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       1. COLORES PRINCIPALES DEL DASHBOARD (EDITAR COLORES AQUÍ)
+       ========================================================================== */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9; /* <<< MODIFICAR AQUÍ: Color de fondo general de toda la página web >>> */
+      color: #1e293b;            /* <<< MODIFICAR AQUÍ: Color del texto principal de la página >>> */
+    }
+
+    /* Clases de Color Personalizadas de Aceros Arequipa */
+    .bg-aceros-primary { background-color: #00529C !important; } /* <<< MODIFICAR AQUÍ: Azul corporativo principal (Encabezados y Botones) >>> */
+    .bg-aceros-dark { background-color: #003B75 !important; }    /* <<< MODIFICAR AQUÍ: Azul oscuro corporativo (Header y Footer) >>> */
+    .bg-aceros-yellow { background-color: #FFC600 !important; }  /* <<< MODIFICAR AQUÍ: Amarillo industrial (Detalles, Badges y Bordes) >>> */
+    
+    .text-aceros-primary { color: #00529C !important; } /* <<< MODIFICAR AQUÍ: Color del texto primario >>> */
+    .text-aceros-dark { color: #003B75 !important; }    /* <<< MODIFICAR AQUÍ: Color del texto en azul oscuro >>> */
+    
+    .border-aceros-primary { border-color: #00529C !important; } /* <<< MODIFICAR AQUÍ: Color de bordes principales >>> */
+    .border-aceros-yellow { border-color: #FFC600 !important; }  /* <<< MODIFICAR AQUÍ: Color de bordes amarillos >>> */
+    
+    /* ==========================================================================
+       2. IMAGEN DE FONDO DEL BANNER PRINCIPAL (BACKGROUND EDITABLE AQUÍ)
+       ========================================================================== */
+    .hero-bg {
+      /* <<< MODIFICAR AQUÍ: Reemplaza la URL entre comillas por el nombre de tu imagen local o URL web (ej: url('11.jpg') o url('mi_fondo.png')) >>> */
+      background: linear-gradient(rgba(0, 59, 117, 0.82), rgba(0, 82, 156, 0.88)), 
+                  url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1600&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .card-shadow {
+      box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04); /* <<< MODIFICAR AQUÍ: Sombra de las tarjetas del dashboard >>> */
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ==========================================================================
+       3. HEADER Y LOGO CORPORATIVO (LOGO EDITABLE AQUÍ)
+       ========================================================================== -->
+  <header class="bg-aceros-dark text-white border-b-4 border-aceros-yellow sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-4">
+        
+        <!-- <<< MODIFICAR LOGO AQUÍ >>> -->
+        <!-- Si tienes tu propio logo en imagen (PNG, JPG, WEBP), reemplaza el bloque de abajo por:
+             <img src="aceros-arequipa-logo-png_seeklogo-281944.webp" alt="Logo" class="h-10 w-auto"> -->
+        <div class="bg-white p-2 rounded-md shadow-sm flex items-center justify-center">
+          <img src="C:\Users\USER\Downloads\ACEROS AREQUIPA\logo.jpg" alt="Logo" class="h-10 w-auto">
+          <!-- Texto al lado del logo -->
+          <div class="ml-2 font-black tracking-tighter text-xs text-[#00529C] leading-none uppercase">
+            ACEROS<br><span class="text-[#003B75]">AREQUIPA</span>
+          </div>
+        </div>
+        <!-- <<< FIN LOGO >>> -->
+
+        <div>
+          <!-- <<< MODIFICAR AQUÍ: Título de la Empresa y Subtítulo >>> -->
+          <h1 class="text-xl font-bold tracking-tight text-white leading-tight">CORPORACIÓN ACEROS AREQUIPA S.A.</h1>
+          <p class="text-xs text-yellow-300 font-medium">Análisis y Formulación de Estados Financieros | RUC: 20100070970</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 text-xs bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium text-gray-100">Simulador de Liquidez Interactivo</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner Hero con Imagen de Fondo -->
+  <div class="hero-bg text-white py-8 px-4 sm:px-6 lg:px-8 shadow-inner">
+    <div class="max-w-7xl mx-auto">
+      <div class="md:w-2/3">
+        <span class="bg-[#FFC600] text-[#003B75] text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider mb-2 inline-block">Caso de Estudio Financiero</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Kit de Diagnóstico Clínico de Liquidez</h2>
+        <p class="mt-2 text-sm text-blue-100 leading-relaxed">
+          Evaluación interactiva y comparativa (2024 vs 2025 o simulado) de la solvencia inmediata y capacidad operativa a través de la Razón Corriente, Prueba Ácida, Prueba Defensiva y Capital de Trabajo Neto.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal Layout Grid -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+      
+      <!-- COLUMNA IZQUIERDA: Calculadora de Inputs Editables (xl:col-span-4) -->
+      <aside class="xl:col-span-4 space-y-6">
+        <div class="bg-white rounded-xl card-shadow border border-slate-200 overflow-hidden sticky top-20">
+          <div class="bg-aceros-primary text-white p-4 flex items-center justify-between border-b-2 border-aceros-yellow">
+            <h3 class="font-bold text-base flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              Calculadora Financiera
+            </h3>
+            <span class="text-xs bg-white/20 px-2 py-0.5 rounded font-mono">En Miles S/.</span>
+          </div>
+
+          <form id="financial-form" class="p-5 space-y-4" onsubmit="event.preventDefault();">
+            
+            <!-- Selector de Año -->
+            <div class="space-y-1 bg-blue-50 p-3 rounded-lg border border-blue-200">
+              <label class="block text-xs font-bold uppercase tracking-wider text-[#003B75] flex items-center justify-between">
+                <span>Seleccionar Periodo Base:</span>
+                <span id="year-label-badge" class="bg-[#00529C] text-white text-[10px] px-2 py-0.5 rounded font-bold">Año 2025</span>
+              </label>
+              <select id="select-year" onchange="changeYearData()" class="block w-full py-2 px-3 text-sm font-bold border-2 border-[#00529C] rounded-lg focus:ring-2 focus:ring-[#00529C] bg-white text-[#003B75] shadow-sm cursor-pointer">
+                <option value="2025" selected>Año 2025 (Oficial EEFF)</option>
+                <option value="2024">Año 2024 (Oficial EEFF)</option>
+              </select>
+            </div>
+
+            <!-- Inputs Editables -->
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Activo Corriente Total</label>
+              <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-semibold text-sm">S/</div>
+                <input type="text" id="input-ac" value="2,329,085" class="block w-full pl-8 pr-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00529C] focus:border-[#00529C] font-semibold text-slate-800 transition-colors">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Inventarios (Aceros / Stock)</label>
+              <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-semibold text-sm">S/</div>
+                <input type="text" id="input-inv" value="1,092,671" class="block w-full pl-8 pr-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00529C] focus:border-[#00529C] font-semibold text-slate-800 transition-colors">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Anticipos / Gastos Pagados x Ant.</label>
+              <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-semibold text-sm">S/</div>
+                <input type="text" id="input-anticipos" value="7,087" class="block w-full pl-8 pr-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00529C] focus:border-[#00529C] font-semibold text-slate-800 transition-colors">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Efectivo y Equivalentes de Efectivo</label>
+              <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-semibold text-sm">S/</div>
+                <input type="text" id="input-efectivo" value="609,389" class="block w-full pl-8 pr-3 py-2 text-sm border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-[#00529C] focus:border-[#00529C] font-semibold text-slate-800 transition-colors">
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200 space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-red-700">Pasivo Corriente Total (Deudas &lt; 1 Año)</label>
+              <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-red-400 font-semibold text-sm">S/</div>
+                <input type="text" id="input-pc" value="1,642,524" class="block w-full pl-8 pr-3 py-2 text-sm border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 font-bold text-red-800 transition-colors">
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="button" onclick="resetToSelectedYear()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-lg text-xs tracking-wider uppercase transition-colors border border-slate-300 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Restablecer Datos Oficiales
+              </button>
+            </div>
+          </form>
+        </div>
+      </aside>
+
+      <!-- COLUMNA DERECHA: Dashboard & Diagnóstico (xl:col-span-8) -->
+      <section class="xl:col-span-8 space-y-8">
+        
+        <!-- Tarjetas de Indicadores (4 KPIs) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- KPI 1: Liquidez General -->
+          <!-- <<< MODIFICAR AQUÍ: Para cambiar el borde izquierdo edita "border-[#00529C]" >>> -->
+          <div class="bg-white rounded-xl card-shadow p-5 border-l-4 border-[#00529C] relative overflow-hidden transition-all duration-300">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">1. Liquidez General</span>
+                <h4 class="text-xs text-slate-400">Activo Corriente / Pasivo Corriente</h4>
+              </div>
+              <span id="badge-lg" class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-[#00529C]">--</span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="val-lg" class="text-3xl font-extrabold text-slate-900">1.42x</span>
+              <span class="text-xs font-medium text-slate-400">Benchmark: 1.50x - 2.00x</span>
+            </div>
+            <p id="interp-lg" class="mt-3 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              Cargando interpretación...
+            </p>
+          </div>
+
+          <!-- KPI 2: Prueba Ácida -->
+          <div class="bg-white rounded-xl card-shadow p-5 border-l-4 border-amber-500 relative overflow-hidden transition-all duration-300">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">2. Prueba Ácida</span>
+                <h4 class="text-xs text-slate-400">(AC - Inventarios - Ant.) / PC</h4>
+              </div>
+              <span id="badge-pa" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">--</span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="val-pa" class="text-3xl font-extrabold text-slate-900">0.75x</span>
+              <span class="text-xs font-medium text-slate-400">Benchmark: ~1.00x</span>
+            </div>
+            <p id="interp-pa" class="mt-3 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              Cargando interpretación...
+            </p>
+          </div>
+
+          <!-- KPI 3: Prueba Defensiva -->
+          <div class="bg-white rounded-xl card-shadow p-5 border-l-4 border-emerald-500 relative overflow-hidden transition-all duration-300">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">3. Prueba Defensiva</span>
+                <h4 class="text-xs text-slate-400">Efectivo / Pasivo Corriente</h4>
+              </div>
+              <span id="badge-pd" class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">--</span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="val-pd" class="text-3xl font-extrabold text-slate-900">37.1%</span>
+              <span class="text-xs font-medium text-slate-400">Benchmark: 20% - 40%</span>
+            </div>
+            <p id="interp-pd" class="mt-3 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              Cargando interpretación...
+            </p>
+          </div>
+
+          <!-- KPI 4: Capital de Trabajo Neto -->
+          <div class="bg-white rounded-xl card-shadow p-5 border-l-4 border-[#FFC600] relative overflow-hidden transition-all duration-300">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">4. Capital de Trabajo</span>
+                <h4 class="text-xs text-slate-400">Activo Corriente - Pasivo Corriente</h4>
+              </div>
+              <span id="badge-ctn" class="px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-900">--</span>
+            </div>
+            <div class="mt-3 flex items-baseline justify-between">
+              <span id="val-ctn" class="text-3xl font-extrabold text-slate-900">S/ 686,561</span>
+              <span class="text-xs font-medium text-slate-400">Benchmark: &gt; S/ 0</span>
+            </div>
+            <p id="interp-ctn" class="mt-3 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              Cargando interpretación...
+            </p>
+          </div>
+
+        </div>
+
+        <!-- SECCIÓN COMPARATIVA DINÁMICA DE LIQUIDEZ (INTERACTIVA) -->
+        <div class="bg-white rounded-xl card-shadow border border-slate-200 overflow-hidden">
+          <div class="bg-aceros-dark text-white p-4 flex items-center justify-between border-b-2 border-aceros-yellow">
+            <h3 class="font-bold text-base flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+              Matriz Comparativa de Liquidez Interactivamente Recalculada
+            </h3>
+            <span class="text-xs bg-emerald-500 text-white px-2.5 py-1 rounded-full font-bold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              En Tiempo Real
+            </span>
+          </div>
+
+          <div class="p-6 overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
+                  <th class="p-3">Indicador de Liquidez</th>
+                  <th id="th-col-base" class="p-3 text-center bg-blue-50/70 text-[#003B75] font-extrabold border-r border-blue-200">Año 2024 (Base)</th>
+                  <th id="th-col-sim" class="p-3 text-center bg-amber-50/70 text-amber-900 font-extrabold border-r border-amber-200">Simulación / Calculadora</th>
+                  <th class="p-3 text-center">Variación Absoluta</th>
+                  <th class="p-3 text-center">Benchmark</th>
+                  <th class="p-3 text-center">Diagnóstico Dinámico</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 font-medium">
+                <!-- Fila 1 -->
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="p-3 font-bold text-slate-800">1. Liquidez General</td>
+                  <td id="tbl-base-lg" class="p-3 text-center font-semibold text-slate-600 bg-blue-50/30 border-r border-blue-100">1.32x</td>
+                  <td id="tbl-sim-lg" class="p-3 text-center font-black text-[#00529C] bg-amber-50/30 border-r border-amber-100">1.42x</td>
+                  <td id="tbl-var-lg" class="p-3 text-center font-bold text-emerald-600">+0.10x (+7.6%)</td>
+                  <td class="p-3 text-center text-slate-500">1.50x - 2.00x</td>
+                  <td id="tbl-diag-lg" class="p-3 text-center"><span class="px-2 py-1 rounded font-bold bg-emerald-100 text-emerald-800">Saludable</span></td>
+                </tr>
+                <!-- Fila 2 -->
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="p-3 font-bold text-slate-800">2. Prueba Ácida</td>
+                  <td id="tbl-base-pa" class="p-3 text-center font-semibold text-slate-600 bg-blue-50/30 border-r border-blue-100">0.66x</td>
+                  <td id="tbl-sim-pa" class="p-3 text-center font-black text-[#00529C] bg-amber-50/30 border-r border-amber-100">0.75x</td>
+                  <td id="tbl-var-pa" class="p-3 text-center font-bold text-emerald-600">+0.09x (+13.6%)</td>
+                  <td class="p-3 text-center text-slate-500">~1.00x</td>
+                  <td id="tbl-diag-pa" class="p-3 text-center"><span class="px-2 py-1 rounded font-bold bg-amber-100 text-amber-800">Dependiente de Stock</span></td>
+                </tr>
+                <!-- Fila 3 -->
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="p-3 font-bold text-slate-800">3. Prueba Defensiva</td>
+                  <td id="tbl-base-pd" class="p-3 text-center font-semibold text-slate-600 bg-blue-50/30 border-r border-blue-100">25.65%</td>
+                  <td id="tbl-sim-pd" class="p-3 text-center font-black text-[#00529C] bg-amber-50/30 border-r border-amber-100">37.10%</td>
+                  <td id="tbl-var-pd" class="p-3 text-center font-bold text-emerald-600">+11.45% (+44.6%)</td>
+                  <td class="p-3 text-center text-slate-500">20% - 40%</td>
+                  <td id="tbl-diag-pd" class="p-3 text-center"><span class="px-2 py-1 rounded font-bold bg-emerald-100 text-emerald-800">Caja Muy Saludable</span></td>
+                </tr>
+                <!-- Fila 4 -->
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="p-3 font-bold text-slate-800">4. Capital de Trabajo Neto</td>
+                  <td id="tbl-base-ctn" class="p-3 text-center font-semibold text-slate-600 bg-blue-50/30 border-r border-blue-100">S/ 578,268 mil</td>
+                  <td id="tbl-sim-ctn" class="p-3 text-center font-black text-[#00529C] bg-amber-50/30 border-r border-amber-100">S/ 686,561 mil</td>
+                  <td id="tbl-var-ctn" class="p-3 text-center font-bold text-emerald-600">+S/ 108,293 mil (+18.7%)</td>
+                  <td class="p-3 text-center text-slate-500">&gt; S/ 0</td>
+                  <td id="tbl-diag-ctn" class="p-3 text-center"><span class="px-2 py-1 rounded font-bold bg-emerald-100 text-emerald-800">Superávit Fondo</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Visualizaciones de Gráficos Interactivos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl card-shadow p-5 border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#00529C]"></span>
+              Comparativo de Ratios (Simulado vs Benchmark)
+            </h4>
+            <div class="relative h-64">
+              <canvas id="chartRatios"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl card-shadow p-5 border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FFC600]"></span>
+              Descomposición del Activo Corriente
+            </h4>
+            <div class="relative h-64">
+              <canvas id="chartComposition"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnóstico Clínico Dinámico (Semaforizado) -->
+        <div class="bg-white rounded-xl card-shadow border border-slate-200 overflow-hidden">
+          <div class="bg-slate-900 text-white p-4 flex items-center justify-between border-b-2 border-aceros-yellow">
+            <h3 class="font-bold text-base flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Análisis Clínico y Diagnóstico Estratégico Siderúrgico
+            </h3>
+            <span id="diagnosis-year-tag" class="text-xs bg-white/20 text-white px-2.5 py-1 rounded-full font-medium">Escenario Activo</span>
+          </div>
+
+          <div class="p-6 space-y-6">
+            
+            <!-- Bloque 1 -->
+            <div id="diag-block-1" class="p-4 rounded-xl border-l-4 transition-all duration-300">
+              <div class="flex items-center justify-between mb-2">
+                <h4 id="diag-title-1" class="font-bold text-sm uppercase tracking-wide">1. Evaluación de Cobertura General</h4>
+                <span id="diag-badge-1" class="text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">--</span>
+              </div>
+              <p id="diag-desc-1" class="text-xs leading-relaxed">--</p>
+            </div>
+
+            <!-- Bloque 2 -->
+            <div id="diag-block-2" class="p-4 rounded-xl border-l-4 transition-all duration-300">
+              <div class="flex items-center justify-between mb-2">
+                <h4 id="diag-title-2" class="font-bold text-sm uppercase tracking-wide">2. Análisis de Dependencia de Inventario</h4>
+                <span id="diag-badge-2" class="text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">--</span>
+              </div>
+              <p id="diag-desc-2" class="text-xs leading-relaxed">--</p>
+            </div>
+
+            <!-- Bloque 3 -->
+            <div id="diag-block-3" class="p-4 rounded-xl border-l-4 transition-all duration-300">
+              <div class="flex items-center justify-between mb-2">
+                <h4 id="diag-title-3" class="font-bold text-sm uppercase tracking-wide">3. Reserva de Supervivencia y Fondo Operativo</h4>
+                <span id="diag-badge-3" class="text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">--</span>
+              </div>
+              <p id="diag-desc-3" class="text-xs leading-relaxed">--</p>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer Institucional -->
+  <footer class="bg-aceros-dark text-slate-300 text-xs py-6 border-t-4 border-aceros-yellow mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+      <p class="font-bold text-white">REALIZADO POR CURIPACO ORELLANA ALEXANDER Y PUÑEZ ARANA ANDRES &copy; 2026</p>
+      <p class="text-slate-400">Unidad Didáctica: Análisis y Formulación de Estados Financieros | I.E.S.T.P. SANTIAGO ANTUNEZ DE MAYOLO</p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       4. DATOS Y LÓGICA JAVASCRIPT (DATOS OFICIALES Y COLORES DE GRÁFICOS)
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       DATOS OFICIALES EEFF (SI DESEAS MODIFICAR LAS CIFRAS BASE EDITAR AQUÍ)
+       ========================================================================== */
+    const eeffData = {
+      "2025": {
+        ac: "2,329,085",
+        inv: "1,092,671",
+        ant: "7,087",
+        efec: "609,389",
+        pc: "1,642,524",
+        num_ac: 2329085,
+        num_inv: 1092671,
+        num_ant: 7087,
+        num_efec: 609389,
+        num_pc: 1642524
+      },
+      "2024": {
+        ac: "2,388,935",
+        inv: "1,193,199",
+        ant: "8,066",
+        efec: "464,460",
+        pc: "1,810,667",
+        num_ac: 2388935,
+        num_inv: 1193199,
+        num_ant: 8066,
+        num_efec: 464460,
+        num_pc: 1810667
+      }
+    };
+
+    let chartRatiosObj = null;
+    let chartCompObj = null;
+
+    function parseFormattedNumber(val) {
+      if (typeof val === 'number') return val;
+      if (!val) return 0;
+      const cleanStr = val.toString().replace(/,/g, '').trim();
+      const num = parseFloat(cleanStr);
+      return isNaN(num) ? 0 : num;
+    }
+
+    function formatNumberWithCommas(num) {
+      if (isNaN(num)) return "0";
+      return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
+    function setupInputFormatting(inputId) {
+      const el = document.getElementById(inputId);
+      el.addEventListener('input', function(e) {
+        let cursorPosition = this.selectionStart;
+        let rawVal = this.value.replace(/,/g, '');
+        
+        if (!isNaN(rawVal) && rawVal.length > 0) {
+          let parts = rawVal.split('.');
+          parts[0] = parseInt(parts[0], 10).toLocaleString('en-US');
+          this.value = parts.join('.');
+        }
+        recalculateAll();
+      });
+    }
+
+    function changeYearData() {
+      const selectedYear = document.getElementById('select-year').value;
+      const data = eeffData[selectedYear];
+
+      document.getElementById('input-ac').value = data.ac;
+      document.getElementById('input-inv').value = data.inv;
+      document.getElementById('input-anticipos').value = data.ant;
+      document.getElementById('input-efectivo').value = data.efec;
+      document.getElementById('input-pc').value = data.pc;
+
+      document.getElementById('year-label-badge').innerText = `Año ${selectedYear}`;
+      document.getElementById('diagnosis-year-tag').innerText = `Año ${selectedYear}`;
+
+      recalculateAll();
+    }
+
+    function resetToSelectedYear() {
+      changeYearData();
+    }
+
+    ['input-ac', 'input-inv', 'input-anticipos', 'input-efectivo', 'input-pc'].forEach(id => {
+      setupInputFormatting(id);
+    });
+
+    function recalculateAll() {
+      const selectedYear = document.getElementById('select-year').value;
+      const baseYear = selectedYear === "2025" ? "2024" : "2025";
+      const baseData = eeffData[baseYear];
+
+      const ac = parseFormattedNumber(document.getElementById('input-ac').value);
+      const inv = parseFormattedNumber(document.getElementById('input-inv').value);
+      const ant = parseFormattedNumber(document.getElementById('input-anticipos').value);
+      const efec = parseFormattedNumber(document.getElementById('input-efectivo').value);
+      const pc = parseFormattedNumber(document.getElementById('input-pc').value);
+
+      const lg = pc > 0 ? (ac / pc) : 0;
+      const pa = pc > 0 ? ((ac - inv - ant) / pc) : 0;
+      const pd = pc > 0 ? (efec / pc) : 0;
+      const ctn = ac - pc;
+
+      const base_ac = baseData.num_ac;
+      const base_inv = baseData.num_inv;
+      const base_ant = baseData.num_ant;
+      const base_efec = baseData.num_efec;
+      const base_pc = baseData.num_pc;
+
+      const base_lg = base_pc > 0 ? (base_ac / base_pc) : 0;
+      const base_pa = base_pc > 0 ? ((base_ac - base_inv - base_ant) / base_pc) : 0;
+      const base_pd = base_pc > 0 ? (base_efec / base_pc) : 0;
+      const base_ctn = base_ac - base_pc;
+
+      document.getElementById('val-lg').innerText = lg.toFixed(2) + "x";
+      document.getElementById('val-pa').innerText = pa.toFixed(2) + "x";
+      document.getElementById('val-pd').innerText = (pd * 100).toFixed(1) + "%";
+      document.getElementById('val-ctn').innerText = "S/ " + formatNumberWithCommas(ctn);
+
+      document.getElementById('interp-lg').innerHTML = `Por cada <strong>S/ 1.00</strong> de deuda a corto plazo, posee <strong>S/ ${lg.toFixed(2)}</strong> de respaldo en activos corrientes.`;
+      document.getElementById('interp-pa').innerHTML = `Excluyendo inventarios de acero, la empresa cuenta con <strong>S/ ${pa.toFixed(2)}</strong> líquidos inmediatos por cada sol de deuda.`;
+      document.getElementById('interp-pd').innerHTML = `La caja y bancos disponibles pueden cancelar inmediatamente el <strong>${(pd * 100).toFixed(1)}%</strong> de las deudas sin requerir ventas adicionales.`;
+      document.getElementById('interp-ctn').innerHTML = `Queda un fondo contable sobrante de <strong>S/ ${formatNumberWithCommas(ctn)} mil</strong> para operar su producción siderúrgica diaria.`;
+
+      updateBadge('badge-lg', lg, 1.5, 1.0);
+      updateBadge('badge-pa', pa, 1.0, 0.6);
+      updateBadge('badge-pd', pd, 0.20, 0.10);
+      updateBadgeCTN('badge-ctn', ctn);
+
+      document.getElementById('th-col-base').innerText = `Año ${baseYear} (Base)`;
+      document.getElementById('th-col-sim').innerText = `Simulado / Calculadora (${selectedYear})`;
+
+      document.getElementById('tbl-base-lg').innerText = base_lg.toFixed(2) + "x";
+      document.getElementById('tbl-base-pa').innerText = base_pa.toFixed(2) + "x";
+      document.getElementById('tbl-base-pd').innerText = (base_pd * 100).toFixed(2) + "%";
+      document.getElementById('tbl-base-ctn').innerText = "S/ " + formatNumberWithCommas(base_ctn) + " mil";
+
+      document.getElementById('tbl-sim-lg').innerText = lg.toFixed(2) + "x";
+      document.getElementById('tbl-sim-pa').innerText = pa.toFixed(2) + "x";
+      document.getElementById('tbl-sim-pd').innerText = (pd * 100).toFixed(2) + "%";
+      document.getElementById('tbl-sim-ctn').innerText = "S/ " + formatNumberWithCommas(ctn) + " mil";
+
+      updateTableRowVar('tbl-var-lg', 'tbl-diag-lg', lg, base_lg, 'x', 1.5, 1.0);
+      updateTableRowVar('tbl-var-pa', 'tbl-diag-pa', pa, base_pa, 'x', 1.0, 0.6);
+      updateTableRowVar('tbl-var-pd', 'tbl-diag-pd', pd * 100, base_pd * 100, '%', 20.0, 10.0);
+      updateTableRowVarCTN('tbl-var-ctn', 'tbl-diag-ctn', ctn, base_ctn);
+
+      updateDiagnosis(lg, pa, pd, ctn);
+      updateCharts(lg, pa, pd, ac, inv, ant, efec);
+    }
+
+    function updateTableRowVar(varId, diagId, simVal, baseVal, unit, opt, min) {
+      const varEl = document.getElementById(varId);
+      const diagEl = document.getElementById(diagId);
+      const diff = simVal - baseVal;
+      const pct = baseVal !== 0 ? ((diff / Math.abs(baseVal)) * 100) : 0;
+
+      const sign = diff >= 0 ? "+" : "";
+      const isPositive = diff >= 0;
+
+      varEl.innerText = `${sign}${diff.toFixed(2)}${unit} (${sign}${pct.toFixed(1)}%)`;
+      varEl.className = `p-3 text-center font-bold ${isPositive ? 'text-emerald-600' : 'text-red-600'}`;
+
+      if (simVal >= opt) {
+        diagEl.innerHTML = `<span class="px-2 py-1 rounded font-bold bg-emerald-100 text-emerald-800">Óptimo / Saludable</span>`;
+      } else if (simVal >= min) {
+        diagEl.innerHTML = `<span class="px-2 py-1 rounded font-bold bg-amber-100 text-amber-800">Aceptable / Moderado</span>`;
+      } else {
+        diagEl.innerHTML = `<span class="px-2 py-1 rounded font-bold bg-red-100 text-red-800">Alerta / Crítico</span>`;
+      }
+    }
+
+    function updateTableRowVarCTN(varId, diagId, simVal, baseVal) {
+      const varEl = document.getElementById(varId);
+      const diagEl = document.getElementById(diagId);
+      const diff = simVal - baseVal;
+      const pct = baseVal !== 0 ? ((diff / Math.abs(baseVal)) * 100) : 0;
+
+      const sign = diff >= 0 ? "+" : "";
+      const isPositive = diff >= 0;
+
+      varEl.innerText = `${sign}S/ ${formatNumberWithCommas(diff)} mil (${sign}${pct.toFixed(1)}%)`;
+      varEl.className = `p-3 text-center font-bold ${isPositive ? 'text-emerald-600' : 'text-red-600'}`;
+
+      if (simVal > 0) {
+        diagEl.innerHTML = `<span class="px-2 py-1 rounded font-bold bg-emerald-100 text-emerald-800">Superávit Operativo</span>`;
+      } else {
+        diagEl.innerHTML = `<span class="px-2 py-1 rounded font-bold bg-red-100 text-red-800">Déficit Operativo</span>`;
+      }
+    }
+
+    function updateBadge(id, val, opt, min) {
+      const el = document.getElementById(id);
+      if (val >= opt) {
+        el.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800";
+        el.innerText = "Saludable";
+      } else if (val >= min) {
+        el.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800";
+        el.innerText = "Moderado";
+      } else {
+        el.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800";
+        el.innerText = "Crítico";
+      }
+    }
+
+    function updateBadgeCTN(id, val) {
+      const el = document.getElementById(id);
+      if (val > 0) {
+        el.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800";
+        el.innerText = "Superávit";
+      } else {
+        el.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800";
+        el.innerText = "Déficit";
+      }
+    }
+
+    function setBlockTheme(blockId, titleId, badgeId, status, titleText, descText) {
+      const block = document.getElementById(blockId);
+      const title = document.getElementById(titleId);
+      const badge = document.getElementById(badgeId);
+
+      if (status === 'green') {
+        block.className = "p-4 rounded-xl border-l-4 transition-all duration-300 bg-emerald-50/60 border-emerald-500 text-slate-800";
+        title.className = "font-bold text-sm uppercase tracking-wide text-emerald-900";
+        badge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full uppercase bg-emerald-200 text-emerald-900";
+        badge.innerText = "Óptimo / Saludable";
+      } else if (status === 'yellow') {
+        block.className = "p-4 rounded-xl border-l-4 transition-all duration-300 bg-amber-50/60 border-amber-500 text-slate-800";
+        title.className = "font-bold text-sm uppercase tracking-wide text-amber-900";
+        badge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full uppercase bg-amber-200 text-amber-900";
+        badge.innerText = "Precaución / Estructural";
+      } else {
+        block.className = "p-4 rounded-xl border-l-4 transition-all duration-300 bg-red-50/60 border-red-500 text-slate-800";
+        title.className = "font-bold text-sm uppercase tracking-wide text-red-900";
+        badge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full uppercase bg-red-200 text-red-900";
+        badge.innerText = "Peligro / Crítico";
+      }
+
+      document.getElementById(titleId).innerText = titleText;
+      document.getElementById(blockId).querySelector('p').innerText = descText;
+    }
+
+    function updateDiagnosis(lg, pa, pd, ctn) {
+      if (lg >= 1.4) {
+        setBlockTheme('diag-block-1', 'diag-title-1', 'diag-badge-1', 'green', 
+          '1. Cobertura General Robusta', 
+          `Con una Razón Corriente de ${lg.toFixed(2)}x, la empresa opera con una holgura financiera sólida. Mantiene un respaldo de activos más que suficiente para afrontar sus vencimientos a corto plazo.`);
+      } else if (lg >= 1.0) {
+        setBlockTheme('diag-block-1', 'diag-title-1', 'diag-badge-1', 'yellow', 
+          '1. Cobertura Estrecha de Corto Plazo', 
+          `La Razón Corriente de ${lg.toFixed(2)}x cubre las deudas del periodo pero deja poco margen ante imprevistos o retrasos en la cobranza de clientes del sector construcción.`);
+      } else {
+        setBlockTheme('diag-block-1', 'diag-title-1', 'diag-badge-1', 'red', 
+          '1. Riesgo de Iliquidez General', 
+          `Ratio crítico de ${lg.toFixed(2)}x. Los activos corrientes son insuficientes para cubrir el pasivo corriente, exigiendo liquidez externa o refinanciación de pasivos.`);
+      }
+
+      if (pa >= 0.9) {
+        setBlockTheme('diag-block-2', 'diag-title-2', 'diag-badge-2', 'green', 
+          '2. Alta Solvencia Inmediata', 
+          `Prueba Ácida de ${pa.toFixed(2)}x. Muestra una baja dependencia de la rotación de stock de aceros para responder por sus deudas corrientes.`);
+      } else if (pa >= 0.5) {
+        setBlockTheme('diag-block-2', 'diag-title-2', 'diag-badge-2', 'yellow', 
+          '2. Dependencia Estructural de Inventarios', 
+          `La Prueba Ácida de ${pa.toFixed(2)}x refleja la naturaleza del negocio siderúrgico: un volumen significativo de capital retenido en productos terminados y materia prima. La solvencia depende de la rotación continua de las ventas.`);
+      } else {
+        setBlockTheme('diag-block-2', 'diag-title-2', 'diag-badge-2', 'red', 
+          '2. Vulnerabilidad por Inmovilización de Stock', 
+          `La Prueba Ácida es alarmante (${pa.toFixed(2)}x). La empresa tiene casi la totalidad de su capital de trabajo atrapado en mercancía de lenta realización.`);
+      }
+
+      if (pd >= 0.20 && ctn > 0) {
+        setBlockTheme('diag-block-3', 'diag-title-3', 'diag-badge-3', 'green', 
+          '3. Excelente Colchón Operativo y Tesorería', 
+          `Prueba defensiva de ${(pd * 100).toFixed(1)}% e incremento del Capital de Trabajo Neto a S/ ${formatNumberWithCommas(ctn)}. Aceros Arequipa posee liquidez de alta calidad para responder ante emergencias de efectivo.`);
+      } else if (ctn > 0) {
+        setBlockTheme('diag-block-3', 'diag-title-3', 'diag-badge-3', 'yellow', 
+          '3. Capital de Trabajo Positivo con Caja Ajustada', 
+          `Mantiene un capital de trabajo positivo (S/ ${formatNumberWithCommas(ctn)}), aunque la reserva en efectivo real es de ${(pd * 100).toFixed(1)}%, requiriendo monitorear los flujos de tesorería semanal.`);
+      } else {
+        setBlockTheme('diag-block-3', 'diag-title-3', 'diag-badge-3', 'red', 
+          '3. Déficit de Trabajo Neto y Caja Crítica', 
+          `Capital de Trabajo negativo (S/ ${formatNumberWithCommas(ctn)}) y nivel de caja en ${(pd * 100).toFixed(1)}%. Compromete la continuidad operativa para la compra de insumos y pago de planillas.`);
+      }
+    }
+
+    /* ==========================================================================
+       5. CONFIGURACIÓN Y COLORES DE LOS GRÁFICOS (EDITAR COLORES DE CHARTS AQUÍ)
+       ========================================================================== */
+    function updateCharts(lg, pa, pd, ac, inv, ant, efec) {
+      // Gráfico 1: Ratios de Barras
+      if (!chartRatiosObj) {
+        const ctx = document.getElementById('chartRatios').getContext('2d');
+        chartRatiosObj = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Liquidez General', 'Prueba Ácida', 'Prueba Defensiva'],
+            datasets: [
+              {
+                label: 'Resultado Simulado',
+                data: [lg, pa, pd],
+                // <<< MODIFICAR AQUÍ: Colores de las barras de tus ratios >>>
+                backgroundColor: ['#00529C', '#F59E0B', '#10B981'], 
+                borderRadius: 6
+              },
+              {
+                label: 'Benchmark Recomendado',
+                data: [1.5, 1.0, 0.20],
+                // <<< MODIFICAR AQUÍ: Color de las barras de benchmark (Gris) >>>
+                backgroundColor: '#CBD5E1', 
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      } else {
+        chartRatiosObj.data.datasets[0].data = [lg, pa, pd];
+        chartRatiosObj.update();
+      }
+
+      // Gráfico 2: Donut de Composición de Activo
+      const otros = Math.max(0, ac - inv - ant - efec);
+      if (!chartCompObj) {
+        const ctx2 = document.getElementById('chartComposition').getContext('2d');
+        chartCompObj = new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: ['Inventario Siderúrgico', 'Efectivo y Bancos', 'Cuentas x Cobrar / Otros', 'Anticipos'],
+            datasets: [{
+              data: [inv, efec, otros, ant],
+              // <<< MODIFICAR AQUÍ: Colores del gráfico circular (Donut) >>>
+              backgroundColor: ['#00529C', '#10B981', '#3B82F6', '#FFC600'] 
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      } else {
+        chartCompObj.data.datasets[0].data = [inv, efec, otros, ant];
+        chartCompObj.update();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      recalculateAll();
+    });
+  </script>
+</body>
+</html>
